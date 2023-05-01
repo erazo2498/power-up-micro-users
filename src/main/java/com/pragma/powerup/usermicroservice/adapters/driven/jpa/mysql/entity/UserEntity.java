@@ -20,10 +20,10 @@ public class UserEntity {
     private Long id;
     private String name;
     private String surname;
-    @Column(unique = true, nullable = false, length = 20)
+    @Column(name = "dni_number", unique = true, nullable = false, length = 20)
     private String dniNumber;
     private String phone;
-    private LocalDate birthDate;
+    private LocalDate birthdate;
     private String email;
     private String password;
     @ManyToOne
