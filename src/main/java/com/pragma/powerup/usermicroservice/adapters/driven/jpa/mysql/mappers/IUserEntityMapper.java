@@ -12,11 +12,10 @@ import java.util.List;
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
         unmappedSourcePolicy = ReportingPolicy.IGNORE)
 public interface IUserEntityMapper {
-    @Mapping(target = "personEntity.id", source = "person.id")
-    @Mapping(target = "roleEntity.id", source = "role.id")
+    @Mapping(target = "roleEntity.id", source = "idRole")
     UserEntity toEntity(User user);
-    @Mapping(target = "person.id", source = "personEntity.id")
-    @Mapping(target = "role.id", source = "roleEntity.id")
+
+    @Mapping(target = "idRole", source = "roleEntity.id")
     User toUser(UserEntity userEntity);
     List<User> toUserList(List<UserEntity> userEntityList);
 }

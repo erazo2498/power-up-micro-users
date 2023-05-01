@@ -1,7 +1,6 @@
 package com.pragma.powerup.usermicroservice.adapters.driving.http.controller;
 
 import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.request.UserRequestDto;
-import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.response.PersonResponseDto;
 import com.pragma.powerup.usermicroservice.adapters.driving.http.handlers.IUserHandler;
 import com.pragma.powerup.usermicroservice.configuration.Constants;
 import io.swagger.v3.oas.annotations.Operation;
@@ -100,4 +99,18 @@ public class UserRestController {
     public ResponseEntity<PersonResponseDto> getClient(@PathVariable Long id) {
         return ResponseEntity.ok(userHandler.getClient(id));
     }
+
+/*
+    @Operation(summary = "Add a new person",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Person created",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Map"))),
+                    @ApiResponse(responseCode = "409", description = "Person already exists",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
+    @PostMapping
+    public ResponseEntity<Map<String, String>> savePerson(@RequestBody PersonRequestDto personRequestDto) {
+        personHandler.savePerson(personRequestDto);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.PERSON_CREATED_MESSAGE));
+    }*/
 }

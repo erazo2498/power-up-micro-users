@@ -1,6 +1,5 @@
 package com.pragma.powerup.usermicroservice.configuration.security;
 
-import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.adapter.UserDetailsServiceImpl;
 import com.pragma.powerup.usermicroservice.configuration.security.jwt.JwtEntryPoint;
 import com.pragma.powerup.usermicroservice.configuration.security.jwt.JwtTokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +19,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class MainSecurity {
 
+    /*
     @Autowired
     UserDetailsServiceImpl userDetailsService;
+    */
 
     @Autowired
     JwtEntryPoint jwtEntryPoint;
