@@ -9,9 +9,6 @@ import java.time.LocalDate;
 @Getter
 public class UserRequestDto {
     private Long id;
-    private Long idRole;
-
-    private Long idUser;
     private String name;
     private String surname;
     private String dniNumber;
@@ -19,5 +16,6 @@ public class UserRequestDto {
     private LocalDate birthDate;
     private String email;
     private String password;
+    private Long idRole;
 
 }

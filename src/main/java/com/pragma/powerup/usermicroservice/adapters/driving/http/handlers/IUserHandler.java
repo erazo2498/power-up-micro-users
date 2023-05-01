@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface IUserHandler {
     void saveUser(UserRequestDto userRequestDto);
-    void deleteUser(UserRequestDto userRequestDto);
+
 }
