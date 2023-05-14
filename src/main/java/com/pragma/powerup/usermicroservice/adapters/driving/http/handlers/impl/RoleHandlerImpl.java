@@ -17,6 +17,7 @@ public class RoleHandlerImpl implements IRoleHandler {
 
     @Override
     public List<RoleResponseDto> getAllRoles() {
+        System.out.println("entro getAllRoles");
         return roleResponseMapper.toResponseList(roleServicePort.getAllRoles());
     }
 }

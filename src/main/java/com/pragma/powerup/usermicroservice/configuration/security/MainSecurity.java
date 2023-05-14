@@ -2,7 +2,6 @@ package com.pragma.powerup.usermicroservice.configuration.security;
 
 import com.pragma.powerup.usermicroservice.configuration.security.jwt.JwtEntryPoint;
 import com.pragma.powerup.usermicroservice.configuration.security.jwt.JwtTokenFilter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,37 +16,27 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 public class MainSecurity {
-
-    /*
-    @Autowired
-    UserDetailsServiceImpl userDetailsService;
-    */
-
-    @Autowired
-    JwtEntryPoint jwtEntryPoint;
-
     @Bean
     public JwtTokenFilter jwtTokenFilter() {
         return new JwtTokenFilter();
     }
 
     @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(
-            AuthenticationConfiguration authConfig) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, JwtEntryPoint jwtEntryPoint) throws Exception {
         http.cors().and().csrf().disable()
                 .authorizeRequests(requests -> requests
-                        .requestMatchers("/auth/login", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/actuator/health", "/role", "/user").permitAll()
-//                        .requestMatchers("/user").hasRole("ADMIN")
+                        .requestMatchers("/auth/login", "/auth/token-is-valid/**", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/actuator/health").permitAll()
+                        .requestMatchers("/user/admin/new-owner").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin().disable()
@@ -57,4 +46,6 @@ public class MainSecurity {
         http.addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
+
+
 }

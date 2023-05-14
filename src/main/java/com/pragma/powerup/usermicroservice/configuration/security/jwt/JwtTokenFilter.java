@@ -25,20 +25,19 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     @Autowired
     UserDetailsService userDetailsService;
 
-    private List<String> excludedPrefixes = Arrays.asList("/auth/**", "/swagger-ui/**", "/actuator/**", "/**/");
+    private List<String> excludedPrefixes = Arrays.asList("/auth/**", "/swagger-ui/**", "/actuator/**");
     private AntPathMatcher pathMatcher = new AntPathMatcher();
 
     @Override
-    protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain)
-            throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain) throws ServletException, IOException {
         String token = getToken(req);
         if (token != null && jwtProvider.validateToken(token)) {
-            String nombreUsuario = jwtProvider.getNombreUsuarioFromToken(token);
-//            UserDetails userDetails = userDetailsService.loadUserByUsername(nombreUsuario);
+            String userName = jwtProvider.getUserNameFromToken(token);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
 
-//            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDetails, null,
-//                    userDetails.getAuthorities());
-//            SecurityContextHolder.getContext().setAuthentication(auth);
+            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDetails, null,
+                    userDetails.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(auth);
         }
         filterChain.doFilter(req, res);
     }

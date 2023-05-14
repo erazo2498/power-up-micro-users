@@ -3,6 +3,7 @@ package com.pragma.powerup.usermicroservice.configuration.security.jwt;
 import com.nimbusds.jwt.JWT;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.JWTParser;
+import com.pragma.powerup.usermicroservice.adapters.driven.jpa.mysql.entity.PrincipalUser;
 import com.pragma.powerup.usermicroservice.adapters.driving.http.dto.response.JwtResponseDto;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -22,6 +23,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.pragma.powerup.usermicroservice.configuration.Constants.ROLES;
+
 @Component
 public class JwtProvider {
     private final static Logger logger = LoggerFactory.getLogger(JwtProvider.class);
@@ -33,18 +36,18 @@ public class JwtProvider {
     private int expiration;
 
     public String generateToken(Authentication authentication) {
-//        PrincipalUser usuarioPrincipal = (PrincipalUser) authentication.getPrincipal();
-//        List<String> roles = usuarioPrincipal.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
+        PrincipalUser principalUser = (PrincipalUser) authentication.getPrincipal();
+        List<String> roles = principalUser.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
         return Jwts.builder()
-//                .setSubject(usuarioPrincipal.getUsername())
-//                .claim("roles", roles)
+                .setSubject(principalUser.getUsername())
+                .claim(ROLES, roles)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(new Date().getTime() + expiration * 180))
                 .signWith(SignatureAlgorithm.HS256, secret.getBytes())
                 .compact();
     }
 
-    public String getNombreUsuarioFromToken(String token) {
+    public String getUserNameFromToken(String token) {
         return Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(token).getBody().getSubject();
     }
 
@@ -72,13 +75,13 @@ public class JwtProvider {
         } catch (ExpiredJwtException e) {
             JWT jwt = JWTParser.parse(jwtResponseDto.getToken());
             JWTClaimsSet claims = jwt.getJWTClaimsSet();
-            String nombreUsuario = claims.getSubject();
-            List<String> roles = claims.getStringListClaim("roles");
+            String userName = claims.getSubject();
+            List<String> roles = claims.getStringListClaim(ROLES);
             //List<String> roles = (List<String>) claims.getClaim("roles");
 
             return Jwts.builder()
-                    .setSubject(nombreUsuario)
-                    .claim("roles", roles)
+                    .setSubject(userName)
+                    .claim(ROLES, roles)
                     .setIssuedAt(new Date())
                     .setExpiration(new Date(new Date().getTime() + expiration))
                     .signWith(SignatureAlgorithm.HS256, secret.getBytes())

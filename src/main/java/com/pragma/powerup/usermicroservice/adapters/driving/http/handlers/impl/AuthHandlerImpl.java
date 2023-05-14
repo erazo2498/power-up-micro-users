@@ -9,6 +9,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -19,6 +20,7 @@ public class AuthHandlerImpl implements IAuthHandler {
 
     private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
+    private final UserDetailsService userDetailsService;
 
     @Override
     public JwtResponseDto login(LoginRequestDto loginRequestDto) {
@@ -27,7 +29,6 @@ public class AuthHandlerImpl implements IAuthHandler {
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtProvider.generateToken(authentication);
-//        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         return new JwtResponseDto(jwt);
     }
 
@@ -35,5 +36,14 @@ public class AuthHandlerImpl implements IAuthHandler {
     public JwtResponseDto refresh(JwtResponseDto jwtResponseDto) throws ParseException {
         String token = jwtProvider.refreshToken(jwtResponseDto);
         return new JwtResponseDto(token);
+    }
+
+    @Override
+    public boolean tokenIsValid(String token) {
+        if (token != null && jwtProvider.validateToken(token)) {
+            String userName = jwtProvider.getUserNameFromToken(token);
+            userDetailsService.loadUserByUsername(userName);
+        }
+        return jwtProvider.validateToken(token);
     }
 }
