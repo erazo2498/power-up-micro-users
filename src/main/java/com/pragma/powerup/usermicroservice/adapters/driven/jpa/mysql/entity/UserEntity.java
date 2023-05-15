@@ -28,6 +28,6 @@ public class UserEntity {
     private String email;
     private String password;
     @ManyToOne
-    @JoinColumn(name = "id_role")
+    @JoinColumn(name = "id_role", nullable = false)
     private RoleEntity roleEntity;
 }

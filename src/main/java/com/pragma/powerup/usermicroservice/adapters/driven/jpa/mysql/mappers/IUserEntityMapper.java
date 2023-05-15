@@ -12,6 +12,7 @@ import java.util.List;
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
         unmappedSourcePolicy = ReportingPolicy.IGNORE)
 public interface IUserEntityMapper {
+    @Mapping(source = "idRole", target = "roleEntity.id")
     UserEntity toEntity(User user);
 
     User toUser(UserEntity userEntity);

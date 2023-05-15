@@ -1,6 +1,6 @@
 <br />
 <div align="center">
-<h3 align="center">PRAGMA POWER-UP</h3>
+<h3 align="center">PRAGMA POWER-UP USER-MICRO-SERVICE</h3>
   <p align="center">
     In this challenge you are going to design the backend of a system that centralizes the services and orders of a restaurant chain that has different branches in the city.
   </p>
@@ -31,23 +31,33 @@ To get a local copy up and running follow these steps.
 
 ### Installation
 
-1. Clone the repository
+1. Clone the repository or download the project .zip
 2. Change directory
    ```sh
-   cd power-up-arquetipo-v3
+   cd power-up-micro-users
    ```
-3. Create a new database in MySQL called powerup
-4. Update the database connection settings
+   or unzip the zip file and open it with intellij IDEA
+3. Create a new database in MySQL called powerup_user
+4. Update the database connection settings and remember your database port, in this case it is 3306
    ```yml
    # src/main/resources/application-dev.yml
    spring:
       datasource:
-          url: jdbc:mysql://localhost/powerup
-          username: root
+          url: jdbc:mysql://localhost:3306/powerup_user
+          username: <your-userName>
           password: <your-password>
+      jpa:
+        hibernate:
+          ddl-auto: create
+        defer-datasource-initialization: true
+      sql:
+        init:
+          mode: always
    ```
-5. After the tables are created execute src/main/resources/data.sql content to populate the database
-6. Open Swagger UI and search the /auth/login endpoint and login with userDni: 123, password: 1234
+5. With the above configuration, the data is automatically added to the corresponding tables, otherwise, after creating the tables, 
+   run src/main/resources/data.sql content to complete the database setup.
+6. Open Swagger UI and search the /auth/login endpoint and login with gmail: email@some.com, password: 1234 for the admin user or 
+   if you want to use a owner user put gmail: email2@some.com, password: 1234
 
 <!-- USAGE -->
 ## Usage

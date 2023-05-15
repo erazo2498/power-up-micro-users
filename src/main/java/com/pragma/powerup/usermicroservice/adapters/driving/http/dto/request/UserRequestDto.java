@@ -27,8 +27,5 @@ public class UserRequestDto {
     private String email;
     @Size(message = "La contraseña debe contener más de 8 caracteres", min = 8)
     private String password;
-//    @NotNull(message = "El rol no puede ser nulo")
-//    @Min(value = 0,message = "El valor del rol debe ser positivo")
-//    private Long idRole;
 
 }

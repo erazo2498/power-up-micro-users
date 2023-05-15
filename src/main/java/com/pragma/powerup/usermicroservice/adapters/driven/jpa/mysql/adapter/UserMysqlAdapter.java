@@ -30,7 +30,6 @@ public class UserMysqlAdapter implements IUserPersistencePort {
             throw new RoleNotFoundException();
         }
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        System.out.println("user.password = " + user.getPassword());
         userRepository.save(userEntityMapper.toEntity(user));
     }
 }
